@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.kamyshanov.volodymyr.weathertestapp.BuildConfig
 import com.kamyshanov.volodymyr.weathertestapp.R
 import com.kamyshanov.volodymyr.weathertestapp.data.network.AuthenticateInterceptor
+import com.kamyshanov.volodymyr.weathertestapp.data.network.WeatherService
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -37,6 +38,8 @@ val networkModule = module {
   single(qualifier = Qualifier.OkHttpClient.WEATHER_API_KEY) {
     androidContext().getString(R.string.open_weather_map_key)
   }
+
+  single { getWeatherService(get()) }
 }
 
 private fun retrofit(
@@ -51,5 +54,8 @@ private fun retrofit(
     .build()
 }
 
+private fun getWeatherService(retrofit: Retrofit): WeatherService {
+  return retrofit.create(WeatherService::class.java)
+}
 
 
