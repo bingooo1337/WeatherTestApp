@@ -65,3 +65,5 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
+/src/release/res/values/api_keys.xml
+/src/debug/res/values/api_keys.xml
