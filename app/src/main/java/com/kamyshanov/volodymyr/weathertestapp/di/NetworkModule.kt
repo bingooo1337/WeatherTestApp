@@ -6,8 +6,10 @@ import com.kamyshanov.volodymyr.weathertestapp.BuildConfig
 import com.kamyshanov.volodymyr.weathertestapp.R
 import com.kamyshanov.volodymyr.weathertestapp.data.network.AuthenticateInterceptor
 import com.kamyshanov.volodymyr.weathertestapp.data.network.WeatherService
+import com.kamyshanov.volodymyr.weathertestapp.di.qualifier.Qualifier
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,7 +23,7 @@ val networkModule = module {
     OkHttpClient.Builder()
       .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
       .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
-      .addInterceptor(get())
+      .addInterceptor(get(named(Qualifier.OkHttpClient.AUTH_INTERCEPTOR)))
       .build()
   }
 
@@ -29,13 +31,11 @@ val networkModule = module {
 
   single { retrofit(get(), get()) }
 
-  single {
-    AuthenticateInterceptor(
-      get(qualifier = Qualifier.OkHttpClient.WEATHER_API_KEY)
-    )
+  single(named(Qualifier.OkHttpClient.AUTH_INTERCEPTOR)) {
+    AuthenticateInterceptor(get(named(Qualifier.OkHttpClient.WEATHER_API_KEY)))
   }
 
-  single(qualifier = Qualifier.OkHttpClient.WEATHER_API_KEY) {
+  single(named(Qualifier.OkHttpClient.WEATHER_API_KEY)) {
     androidContext().getString(R.string.open_weather_map_key)
   }
 
