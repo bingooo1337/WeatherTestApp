@@ -5,7 +5,9 @@ import com.kamyshanov.volodymyr.weathertestapp.data.database.WeatherDatabase
 import com.kamyshanov.volodymyr.weathertestapp.data.mapper.impl.WeatherDetailsMapper
 import com.kamyshanov.volodymyr.weathertestapp.data.mapper.impl.WeatherMapper
 import com.kamyshanov.volodymyr.weathertestapp.data.mapper.impl.WindMapper
+import com.kamyshanov.volodymyr.weathertestapp.data.repository.WeatherRepositoryImpl
 import com.kamyshanov.volodymyr.weathertestapp.di.qualifier.Qualifier
+import com.kamyshanov.volodymyr.weathertestapp.domain.repository.WeatherRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -21,6 +23,10 @@ val dataModule = module {
   }
 
   single { get<WeatherDatabase>().weatherDao() }
+
+  single<WeatherRepository> {
+    WeatherRepositoryImpl(get(), get(), get(named(Qualifier.Mapper.WEATHER_MAPPER)))
+  }
 
   single(named(Qualifier.Mapper.WIND_MAPPER)) { WindMapper() }
   single(named(Qualifier.Mapper.DETAILS_MAPPER)) { WeatherDetailsMapper() }
