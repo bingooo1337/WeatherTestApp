@@ -24,12 +24,22 @@ class WeatherRepositoryImpl(
   override fun getWeatherAroundLocation(location: Location): Single<List<Weather>> {
     return weatherService
       .getCurrentWeatherInArea(location.latitude, location.longitude)
+      .doOnSuccess {
+        weatherDao.saveWeatherList(it.list.map { response ->
+          weatherMapper.mapResponseToDatabase(response)
+        })
+      }
       .map { result -> result.list.map { weatherMapper.mapResponseToDomain(it) } }
   }
 
   override fun getWeatherForCities(citiesIds: List<Long>): Single<List<Weather>> {
     return weatherService
       .getWeatherInCities(citiesIds)
+      .doOnSuccess {
+        weatherDao.saveWeatherList(it.list.map { response ->
+          weatherMapper.mapResponseToDatabase(response)
+        })
+      }
       .map { result -> result.list.map { weatherMapper.mapResponseToDomain(it) } }
       .onErrorResumeNext {
         weatherDao
@@ -42,6 +52,9 @@ class WeatherRepositoryImpl(
   override fun getWeatherByCityName(cityName: String): Single<Weather> {
     return weatherService
       .getCurrentWeatherByCityName(cityName)
+      .doOnSuccess {
+        weatherDao.saveWeather(weatherMapper.mapResponseToDatabase(it))
+      }
       .map { weatherMapper.mapResponseToDomain(it) }
       .onErrorResumeNext {
         weatherDao
