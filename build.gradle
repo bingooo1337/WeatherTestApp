@@ -15,6 +15,7 @@ buildscript {
         okHttpVersion = '3.11.0'
         roomVersion = "2.1.0-beta01"
         locationPlayServicesVersion = "16.0.0"
+        navigationVersion = "2.0.0"
     }
 
     repositories {

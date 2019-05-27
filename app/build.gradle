@@ -49,6 +49,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
 
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
     implementation "com.google.android.gms:play-services-location:$locationPlayServicesVersion"
 
     testImplementation 'junit:junit:4.12'
