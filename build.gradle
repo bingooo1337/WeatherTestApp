@@ -16,6 +16,7 @@ buildscript {
         roomVersion = "2.1.0-beta01"
         locationPlayServicesVersion = "16.0.0"
         navigationVersion = "2.0.0"
+        moxyVersion = "1.7.0"
     }
 
     repositories {

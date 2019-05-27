@@ -49,6 +49,10 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
 
+    implementation "tech.schoolhelper:moxy-x:$moxyVersion"
+    kapt "tech.schoolhelper:moxy-x-compiler:$moxyVersion"
+    implementation "tech.schoolhelper:moxy-x-androidx:$moxyVersion"
+
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
