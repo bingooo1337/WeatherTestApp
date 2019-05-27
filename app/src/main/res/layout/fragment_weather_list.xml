@@ -1,0 +1,51 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.weatherlist.WeatherListFragment"
+    >
+
+
+  <TextView
+      android:id="@+id/errorText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/default_padding"
+      android:gravity="center"
+      android:textColor="@android:color/holo_red_light"
+      android:textSize="@dimen/subtitle_text_size"
+      android:visibility="gone"
+      app:layout_constraintBottom_toTopOf="@id/weatherListRecyclerView"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Error message"
+      tools:visibility="visible"
+      />
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/weatherListRecyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/errorText"
+      tools:listitem="@layout/view_item_weather_list"
+      />
+
+  <FrameLayout
+      android:id="@+id/loadingHud"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/colorLoadingBackground"
+      android:clickable="false"
+      android:visibility="gone"
+      >
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+  </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
