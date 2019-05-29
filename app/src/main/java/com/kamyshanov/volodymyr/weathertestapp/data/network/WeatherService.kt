@@ -12,12 +12,12 @@ interface WeatherService {
   fun getCurrentWeatherInArea(
     @Query("lat") areaCenterLat: Double,
     @Query("lon") areaCenterLong: Double,
-    @Query("cnt") cityCount: Int = 50
+    @Query("cnt") cityCount: Int = 15
   ): Single<WeatherListResponse>
 
   @GET("group")
   fun getWeatherInCities(
-    @Query("id") citiesIds: List<Long>
+    @Query("id") citiesIds: String
   ): Single<WeatherListResponse>
 
   @GET("weather")

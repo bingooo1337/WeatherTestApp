@@ -34,7 +34,7 @@ class WeatherRepositoryImpl(
 
   override fun getWeatherForCities(citiesIds: List<Long>): Single<List<Weather>> {
     return weatherService
-      .getWeatherInCities(citiesIds)
+      .getWeatherInCities(citiesIds.joinToString(separator = ","))
       .doOnSuccess {
         weatherDao.saveWeatherList(it.list.map { response ->
           weatherMapper.mapResponseToDatabase(response)
