@@ -6,6 +6,7 @@ import com.kamyshanov.volodymyr.weathertestapp.BuildConfig
 import com.kamyshanov.volodymyr.weathertestapp.R
 import com.kamyshanov.volodymyr.weathertestapp.data.network.AuthenticateInterceptor
 import com.kamyshanov.volodymyr.weathertestapp.data.network.WeatherService
+import com.kamyshanov.volodymyr.weathertestapp.data.network.WeatherUnitsInterceptor
 import com.kamyshanov.volodymyr.weathertestapp.di.qualifier.Qualifier
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -24,6 +25,7 @@ val networkModule = module {
       .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
       .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
       .addInterceptor(get(named(Qualifier.OkHttpClient.AUTH_INTERCEPTOR)))
+      .addInterceptor(get(named(Qualifier.OkHttpClient.WEATHER_UNITS_INTERCEPTOR)))
       .build()
   }
 
@@ -34,6 +36,7 @@ val networkModule = module {
   single(named(Qualifier.OkHttpClient.AUTH_INTERCEPTOR)) {
     AuthenticateInterceptor(get(named(Qualifier.OkHttpClient.WEATHER_API_KEY)))
   }
+  single(named(Qualifier.OkHttpClient.WEATHER_UNITS_INTERCEPTOR)) { WeatherUnitsInterceptor() }
 
   single(named(Qualifier.OkHttpClient.WEATHER_API_KEY)) {
     androidContext().getString(R.string.open_weather_map_key)
