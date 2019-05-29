@@ -1,6 +1,8 @@
 package com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,8 @@ import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
 import com.kamyshanov.volodymyr.weathertestapp.presentation.WeatherListPresenter
 import com.kamyshanov.volodymyr.weathertestapp.presentation.view.WeatherListView
 import com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist.adapter.WeatherRecyclerViewAdapter
+import com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist.addcitydialog.AddCityDialogFragment
+import kotlinx.android.synthetic.main.fragment_weather_list.addCityButton
 import kotlinx.android.synthetic.main.fragment_weather_list.errorText
 import kotlinx.android.synthetic.main.fragment_weather_list.loadingHud
 import kotlinx.android.synthetic.main.fragment_weather_list.weatherListRecyclerView
@@ -27,6 +31,7 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
 
   private companion object {
     const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    const val ADD_CITY_REQUEST_CODE = 11
   }
 
   @InjectPresenter
@@ -51,6 +56,11 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
     view: View,
     savedInstanceState: Bundle?
   ) {
+    addCityButton.setOnClickListener {
+      AddCityDialogFragment()
+          .apply { setTargetFragment(this@WeatherListFragment, ADD_CITY_REQUEST_CODE) }
+          .show(fragmentManager, "AddCityDialogFragment")
+    }
     weatherListRecyclerView.layoutManager = LinearLayoutManager(context)
     weatherListRecyclerView.adapter = adapter
   }
@@ -67,6 +77,17 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
             grantResults[locationIndex] == PERMISSION_GRANTED
         )
       }
+    }
+  }
+
+  override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    if (requestCode == ADD_CITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+      data?.getStringExtra(AddCityDialogFragment.TAG_CITY_SELECTED)
+          ?.let { presenter.onNewCityAdded(it) }
     }
   }
 
@@ -114,5 +135,10 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
     } else {
       presenter.onGoogleApiIsNotAvailable()
     }
+  }
+
+  override fun addNewCityWeather(weather: Weather) {
+    adapter.addItemAtPosition(weather, 0)
+    weatherListRecyclerView.smoothScrollToPosition(0)
   }
 }

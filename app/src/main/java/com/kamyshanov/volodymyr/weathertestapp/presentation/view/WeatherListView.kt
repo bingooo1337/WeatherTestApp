@@ -13,4 +13,5 @@ interface WeatherListView : MvpView {
   fun showError(errorMessage: String)
   fun hideError()
   fun checkLocationPermission()
+  fun addNewCityWeather(weather: Weather)
 }

@@ -5,6 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.kamyshanov.volodymyr.weathertestapp.data.database.model.City
 import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
+import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetCityWeatherUseCase
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetSavedCitiesUseCase
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetUserLocationUseCase
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetWeatherAroundUserUseCase
@@ -18,7 +19,8 @@ class WeatherListPresenter(
   private val getSavedCitiesUseCase: GetSavedCitiesUseCase,
   private val getUserLocationUseCase: GetUserLocationUseCase,
   private val getWeatherAroundUserUseCase: GetWeatherAroundUserUseCase,
-  private val getWeatherInCitiesUseCase: GetWeatherInCitiesUseCase
+  private val getWeatherInCitiesUseCase: GetWeatherInCitiesUseCase,
+  private val getCityWeatherUseCase: GetCityWeatherUseCase
 ) : MvpPresenter<WeatherListView>() {
 
   private val disposables = CompositeDisposable()
@@ -46,10 +48,8 @@ class WeatherListPresenter(
           viewState.hideLoading()
           viewState.showError("No location permission")
         }
-      }
-
+      }.also { disposables.add(it) }
       getUserLocationUseCase.execute(Unit, observer)
-      disposables.add(observer)
     } else {
       viewState.hideLoading()
       viewState.showError("No saved cities and no location permission")
@@ -59,6 +59,19 @@ class WeatherListPresenter(
   fun onGoogleApiIsNotAvailable() {
     viewState.hideLoading()
     viewState.showError("GoogleApi is not available")
+  }
+
+  fun onNewCityAdded(cityName: String) {
+    val observer = object : DisposableSingleObserver<Weather>() {
+      override fun onSuccess(t: Weather) {
+        viewState.addNewCityWeather(t)
+      }
+
+      override fun onError(e: Throwable) {}
+
+    }.also { disposables.add(it) }
+
+    getCityWeatherUseCase.execute(cityName, observer)
   }
 
   private fun loadSavedCities() {
@@ -74,8 +87,7 @@ class WeatherListPresenter(
       override fun onError(e: Throwable) {
         viewState.checkLocationPermission()
       }
-    }
-    disposables.add(observer)
+    }.also { disposables.add(it) }
     getSavedCitiesUseCase.execute(Unit, observer)
   }
 
@@ -90,10 +102,8 @@ class WeatherListPresenter(
         viewState.hideLoading()
         viewState.showError("Weather loading error")
       }
-    }
-
+    }.also { disposables.add(it) }
     getWeatherInCitiesUseCase.execute(cities.map { it.cityId }, observer)
-    disposables.add(observer)
   }
 
   private fun loadWeatherForLocation(location: Location) {
@@ -107,9 +117,7 @@ class WeatherListPresenter(
         viewState.hideLoading()
         viewState.showError("Weather around user loading error")
       }
-    }
-
+    }.also { disposables.add(it) }
     getWeatherAroundUserUseCase.execute(location, observer)
-    disposables.add(observer)
   }
 }

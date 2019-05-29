@@ -3,4 +3,5 @@
   <string name="temperature_placeholder">%.2f °C</string>
   <string name="pressure_placeholder">Pressure: %.1f hPa</string>
   <string name="humidity_placeholder">Humidity: %.0f%%</string>
+  <string name="search">Search</string>
 </resources>

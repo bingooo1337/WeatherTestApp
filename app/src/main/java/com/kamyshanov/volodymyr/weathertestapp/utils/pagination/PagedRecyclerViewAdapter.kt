@@ -80,6 +80,14 @@ abstract class PagedRecyclerViewAdapter<T>(
     notifyItemRangeInserted(startPosition, newItems.size)
   }
 
+  fun addItemAtPosition(
+    item: T,
+    position: Int
+  ) {
+    _items.add(position, item)
+    notifyItemInserted(position)
+  }
+
   fun reset() {
     val oldItemCount = itemCount
     _items.clear()
