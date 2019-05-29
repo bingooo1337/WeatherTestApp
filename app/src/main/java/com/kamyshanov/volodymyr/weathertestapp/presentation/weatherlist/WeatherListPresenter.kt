@@ -5,11 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.kamyshanov.volodymyr.weathertestapp.data.database.model.City
 import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
-import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetCityWeatherUseCase
-import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetSavedCitiesUseCase
-import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetUserLocationUseCase
-import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetWeatherAroundUserUseCase
-import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetWeatherInCitiesUseCase
+import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.*
 import com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.view.WeatherListView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -23,8 +19,14 @@ class WeatherListPresenter(
   private val getCityWeatherUseCase: GetCityWeatherUseCase
 ) : MvpPresenter<WeatherListView>() {
 
+  private companion object {
+    const val PAGE_SIZE = 10
+  }
+
   private val disposables = CompositeDisposable()
-  private val cities = mutableListOf<City>()
+  private val savedCities = mutableListOf<City>()
+
+  private var pageNumber = 0
 
   override fun onFirstViewAttach() {
     super.onFirstViewAttach()
@@ -74,13 +76,17 @@ class WeatherListPresenter(
     getCityWeatherUseCase.execute(cityName, observer)
   }
 
+  fun loadNewWeatherListPage() {
+    loadWeatherForCities(savedCities.drop(pageNumber * PAGE_SIZE).take(PAGE_SIZE))
+  }
+
   private fun loadSavedCities() {
     val observer = object : DisposableSingleObserver<List<City>>() {
       override fun onSuccess(t: List<City>) {
         if (t.isEmpty()) viewState.checkLocationPermission()
         else {
-          loadWeatherForCities(t.take(10))
-          cities.addAll(t)
+          savedCities.addAll(t)
+          loadNewWeatherListPage()
         }
       }
 
@@ -95,7 +101,10 @@ class WeatherListPresenter(
     val observer = object : DisposableSingleObserver<List<Weather>>() {
       override fun onSuccess(t: List<Weather>) {
         viewState.hideLoading()
-        viewState.showWeatherList(t)
+        viewState.showWeatherList(
+            t, savedCities.size <= pageNumber * PAGE_SIZE + t.size
+        )
+        pageNumber++
       }
 
       override fun onError(e: Throwable) {
@@ -110,7 +119,7 @@ class WeatherListPresenter(
     val observer = object : DisposableSingleObserver<List<Weather>>() {
       override fun onSuccess(t: List<Weather>) {
         viewState.hideLoading()
-        viewState.showWeatherList(t)
+        viewState.showWeatherList(t, true)
       }
 
       override fun onError(e: Throwable) {

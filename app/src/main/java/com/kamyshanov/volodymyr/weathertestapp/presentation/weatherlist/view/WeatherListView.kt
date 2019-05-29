@@ -1,4 +1,4 @@
-package com.kamyshanov.volodymyr.weathertestapp.presentation.view
+package com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.view
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
@@ -9,7 +9,7 @@ import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
 interface WeatherListView : MvpView {
   fun showLoading()
   fun hideLoading()
-  fun showWeatherList(weatherList: List<Weather>)
+  fun showWeatherList(weatherList: List<Weather>, hasLoadedAllItems: Boolean)
   fun showError(errorMessage: String)
   fun hideError()
   fun checkLocationPermission()

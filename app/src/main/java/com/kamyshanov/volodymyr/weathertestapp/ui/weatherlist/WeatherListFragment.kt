@@ -21,18 +21,21 @@ import com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.WeatherL
 import com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.view.WeatherListView
 import com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist.adapter.WeatherRecyclerViewAdapter
 import com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist.addcitydialog.AddCityDialogFragment
-import kotlinx.android.synthetic.main.fragment_weather_list.addCityButton
-import kotlinx.android.synthetic.main.fragment_weather_list.errorText
-import kotlinx.android.synthetic.main.fragment_weather_list.loadingHud
-import kotlinx.android.synthetic.main.fragment_weather_list.weatherListRecyclerView
+import com.kamyshanov.volodymyr.weathertestapp.utils.pagination.PaginationCallbacks
+import com.kamyshanov.volodymyr.weathertestapp.utils.pagination.RecyclerViewEndScrollListener
+import kotlinx.android.synthetic.main.fragment_weather_list.*
 import org.koin.android.ext.android.inject
 
-class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
+class WeatherListFragment : MvpAppCompatFragment(),
+    WeatherListView, PaginationCallbacks {
 
   private companion object {
     const val LOCATION_PERMISSION_REQUEST_CODE = 1
     const val ADD_CITY_REQUEST_CODE = 11
   }
+
+  override var isLoading: Boolean = true
+  override var hasLoadedAllItems: Boolean = true
 
   @InjectPresenter
   lateinit var presenter: WeatherListPresenter
@@ -63,6 +66,7 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
     }
     weatherListRecyclerView.layoutManager = LinearLayoutManager(context)
     weatherListRecyclerView.adapter = adapter
+    weatherListRecyclerView.addOnScrollListener(RecyclerViewEndScrollListener(3, this))
   }
 
   override fun onRequestPermissionsResult(
@@ -99,8 +103,13 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
     loadingHud.visibility = View.GONE
   }
 
-  override fun showWeatherList(weatherList: List<Weather>) {
-    adapter.addItems(weatherList, true)
+  override fun showWeatherList(
+    weatherList: List<Weather>,
+    hasLoadedAllItems: Boolean
+  ) {
+    isLoading = false
+    this.hasLoadedAllItems = hasLoadedAllItems
+    adapter.addItems(weatherList, hasLoadedAllItems)
   }
 
   override fun showError(errorMessage: String) {
@@ -139,6 +148,12 @@ class WeatherListFragment : MvpAppCompatFragment(), WeatherListView {
 
   override fun addNewCityWeather(weather: Weather) {
     adapter.addItemAtPosition(weather, 0)
-    weatherListRecyclerView.smoothScrollToPosition(0)
+    (weatherListRecyclerView.layoutManager as? LinearLayoutManager)
+        ?.scrollToPosition(0)
+  }
+
+  override fun onLoadMore() {
+    isLoading = true
+    presenter.loadNewWeatherListPage()
   }
 }
