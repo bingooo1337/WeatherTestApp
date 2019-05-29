@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.kamyshanov.volodymyr.weathertestapp">
 
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
   <application
       android:name=".WeatherTestApp"
       android:allowBackup="true"

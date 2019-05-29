@@ -18,7 +18,10 @@ class GetUserLocationUseCase(
   override fun buildUseCase(parameter: Unit): Single<Location> {
     return Single.create { emitter ->
       fusedLocationClient.lastLocation
-          .addOnSuccessListener { emitter.onSuccess(it) }
+          .addOnSuccessListener {
+            if (it == null) emitter.onError(NullPointerException())
+            else emitter.onSuccess(it)
+          }
           .addOnFailureListener { emitter.onError(it) }
     }
   }

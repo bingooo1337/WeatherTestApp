@@ -1,6 +1,7 @@
 package com.kamyshanov.volodymyr.weathertestapp.di
 
 import androidx.room.Room
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.kamyshanov.volodymyr.weathertestapp.data.database.WeatherDatabase
 import com.kamyshanov.volodymyr.weathertestapp.data.mapper.impl.WeatherDetailsMapper
 import com.kamyshanov.volodymyr.weathertestapp.data.mapper.impl.WeatherMapper
@@ -36,4 +37,6 @@ val dataModule = module {
       get(named(Qualifier.Mapper.WIND_MAPPER))
     )
   }
+
+  single { FusedLocationProviderClient(androidContext()) }
 }
