@@ -1,7 +1,7 @@
 package com.kamyshanov.volodymyr.weathertestapp.domain.model
 
 class Weather(
-  val cityId: String,
+  val cityId: Long,
   val cityName: String,
   val temp: Double,
   val pressure: Double,

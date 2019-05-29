@@ -9,7 +9,7 @@ class WeatherResponse(
   @SerializedName("dt")
   val date: Long,
   @SerializedName("id")
-  val cityId: String,
+  val cityId: Long,
   @SerializedName("name")
   val cityName: String
 )

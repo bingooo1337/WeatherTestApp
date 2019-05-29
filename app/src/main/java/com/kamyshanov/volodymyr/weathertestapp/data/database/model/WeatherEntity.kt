@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "weather")
 class WeatherEntity(
   @PrimaryKey
-  val cityId: String,
+  val cityId: Long,
   val cityName: String,
   val temp: Double,
   val pressure: Double,
