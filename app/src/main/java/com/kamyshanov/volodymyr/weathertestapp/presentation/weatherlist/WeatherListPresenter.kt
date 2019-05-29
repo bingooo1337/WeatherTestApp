@@ -1,4 +1,4 @@
-package com.kamyshanov.volodymyr.weathertestapp.presentation
+package com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist
 
 import android.location.Location
 import com.arellomobile.mvp.InjectViewState
@@ -10,7 +10,7 @@ import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetSavedCitie
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetUserLocationUseCase
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetWeatherAroundUserUseCase
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetWeatherInCitiesUseCase
-import com.kamyshanov.volodymyr.weathertestapp.presentation.view.WeatherListView
+import com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.view.WeatherListView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 

@@ -17,8 +17,8 @@ import com.google.android.gms.common.ConnectionResult.SUCCESS
 import com.google.android.gms.common.GoogleApiAvailability
 import com.kamyshanov.volodymyr.weathertestapp.R
 import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
-import com.kamyshanov.volodymyr.weathertestapp.presentation.WeatherListPresenter
-import com.kamyshanov.volodymyr.weathertestapp.presentation.view.WeatherListView
+import com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.WeatherListPresenter
+import com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist.view.WeatherListView
 import com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist.adapter.WeatherRecyclerViewAdapter
 import com.kamyshanov.volodymyr.weathertestapp.ui.weatherlist.addcitydialog.AddCityDialogFragment
 import kotlinx.android.synthetic.main.fragment_weather_list.addCityButton
