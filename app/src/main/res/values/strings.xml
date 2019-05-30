@@ -4,4 +4,10 @@
   <string name="pressure_placeholder">Pressure: %.1f hPa</string>
   <string name="humidity_placeholder">Humidity: %.0f%%</string>
   <string name="search">Search</string>
+    <string name="no_location_permission">No location permission</string>
+  <string name="no_saved_cities_no_location">No saved cities and no location permission</string>
+  <string name="google_api_not_available">GoogleApi is not available</string>
+  <string name="weather_loading_error">Weather loading error</string>
+  <string name="weather_around_user_error">Weather around user loading error</string>
+  <string name="add_city_error">City not found or an error occurred</string>
 </resources>

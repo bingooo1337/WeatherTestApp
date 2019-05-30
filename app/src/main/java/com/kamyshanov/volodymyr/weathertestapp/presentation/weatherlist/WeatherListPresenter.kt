@@ -1,8 +1,10 @@
 package com.kamyshanov.volodymyr.weathertestapp.presentation.weatherlist
 
+import android.content.res.Resources
 import android.location.Location
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.kamyshanov.volodymyr.weathertestapp.R
 import com.kamyshanov.volodymyr.weathertestapp.data.database.model.City
 import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.*
@@ -12,6 +14,7 @@ import io.reactivex.observers.DisposableSingleObserver
 
 @InjectViewState
 class WeatherListPresenter(
+  private val resources: Resources,
   private val getSavedCitiesUseCase: GetSavedCitiesUseCase,
   private val getUserLocationUseCase: GetUserLocationUseCase,
   private val getWeatherAroundUserUseCase: GetWeatherAroundUserUseCase,
@@ -48,19 +51,19 @@ class WeatherListPresenter(
 
         override fun onError(e: Throwable) {
           viewState.hideLoading()
-          viewState.showError("No location permission")
+          viewState.showError(resources.getString(R.string.no_location_permission))
         }
       }.also { disposables.add(it) }
       getUserLocationUseCase.execute(Unit, observer)
     } else {
       viewState.hideLoading()
-      viewState.showError("No saved cities and no location permission")
+      viewState.showError(resources.getString(R.string.no_saved_cities_no_location))
     }
   }
 
   fun onGoogleApiIsNotAvailable() {
     viewState.hideLoading()
-    viewState.showError("GoogleApi is not available")
+    viewState.showError(resources.getString(R.string.google_api_not_available))
   }
 
   fun onNewCityAdded(cityName: String) {
@@ -109,7 +112,7 @@ class WeatherListPresenter(
 
       override fun onError(e: Throwable) {
         viewState.hideLoading()
-        viewState.showError("Weather loading error")
+        viewState.showError(resources.getString(R.string.weather_loading_error))
       }
     }.also { disposables.add(it) }
     getWeatherInCitiesUseCase.execute(cities.map { it.cityId }, observer)
@@ -124,7 +127,7 @@ class WeatherListPresenter(
 
       override fun onError(e: Throwable) {
         viewState.hideLoading()
-        viewState.showError("Weather around user loading error")
+        viewState.showError(resources.getString(R.string.weather_around_user_error))
       }
     }.also { disposables.add(it) }
     getWeatherAroundUserUseCase.execute(location, observer)

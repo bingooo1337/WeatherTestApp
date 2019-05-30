@@ -1,7 +1,9 @@
 package com.kamyshanov.volodymyr.weathertestapp.presentation.addcity
 
+import android.content.res.Resources
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.kamyshanov.volodymyr.weathertestapp.R
 import com.kamyshanov.volodymyr.weathertestapp.domain.model.Weather
 import com.kamyshanov.volodymyr.weathertestapp.domain.usecase.impl.GetCityWeatherUseCase
 import com.kamyshanov.volodymyr.weathertestapp.presentation.addcity.view.AddCityView
@@ -10,6 +12,7 @@ import io.reactivex.observers.DisposableSingleObserver
 
 @InjectViewState
 class AddCityPresenter(
+  private val resources: Resources,
   private val getWeatherCityUseCase: GetCityWeatherUseCase
 ) : MvpPresenter<AddCityView>() {
 
@@ -31,7 +34,7 @@ class AddCityPresenter(
 
       override fun onError(e: Throwable) {
         viewState.hideLoading()
-        viewState.showError("City not found or an error occurred")
+        viewState.showError(resources.getString(R.string.add_city_error))
       }
     }
 

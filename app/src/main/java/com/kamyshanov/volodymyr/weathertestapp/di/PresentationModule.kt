@@ -6,10 +6,8 @@ import org.koin.dsl.module
 
 val presentationModule = module {
   factory {
-    WeatherListPresenter(
-        get(), get(), get(), get(), get()
-    )
+    WeatherListPresenter(get(), get(), get(), get(), get(), get())
   }
 
-  factory { AddCityPresenter(get()) }
+  factory { AddCityPresenter(get(), get()) }
 }
