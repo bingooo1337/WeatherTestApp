@@ -7,7 +7,7 @@ import com.kamyshanov.volodymyr.weathertestapp.data.database.model.WeatherEntity
 import com.kamyshanov.volodymyr.weathertestapp.data.database.model.WindEntity
 
 @Database(
-  entities = [WeatherEntity::class, WindEntity::class, WeatherDetailsEntity::class],
+  entities = [WeatherEntity::class],
   version = 1,
   exportSchema = false
 )

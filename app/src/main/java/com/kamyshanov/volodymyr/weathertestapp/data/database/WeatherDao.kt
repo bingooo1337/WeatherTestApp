@@ -12,10 +12,10 @@ import io.reactivex.Single
 @Dao
 interface WeatherDao {
   @Insert(onConflict = REPLACE)
-  fun saveWeather(weather: WeatherEntity): Completable
+  fun saveWeather(weather: WeatherEntity)
 
   @Insert(onConflict = REPLACE)
-  fun saveWeatherList(weather: List<WeatherEntity>): Completable
+  fun saveWeatherList(weather: List<WeatherEntity>)
 
   @Query("SELECT cityId, cityName FROM weather")
   fun getCityList(): Single<List<City>>
